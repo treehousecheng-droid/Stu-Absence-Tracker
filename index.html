@@ -45,6 +45,8 @@ h1{font-size:26px;margin:0;font-weight:700;letter-spacing:-.01em}
 .d.oth{background:var(--other);color:var(--ink)}
 .d.onb{background:var(--onb);color:var(--ink)}
 .d.pre{opacity:.3}
+.login{max-width:380px;margin:14vh auto 0;padding:26px}
+.login h1{margin-bottom:2px}
 .tl{display:grid;grid-template-columns:72px repeat(31,minmax(14px,1fr)) 112px;gap:3px;align-items:center;min-width:720px}
 .tl .d{font-size:0}
 .tl .lab{font-size:12.5px;font-weight:600;white-space:nowrap}
@@ -78,9 +80,16 @@ footer{font-size:12.5px;color:var(--muted);margin-top:8px}
 @media (max-width:620px){h1{font-size:22px}.hide-sm{display:none}}
 </style></head><body><div id="root"></div><script id="state" type="application/json">{"name":"Matthew Stu Dunthorne","role":"Chief Engineer","vessel":"MY Treehouse","trackFrom":"2025-01-14","entries":[{"id":"a1","start":"2025-03-27","end":"2025-03-27","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from San Diego, USA. Via San Francisco."},{"id":"a2","start":"2025-03-28","end":"2025-03-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a3","start":"2025-04-01","end":"2025-04-30","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a4","start":"2025-05-01","end":"2025-05-21","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a5","start":"2025-05-23","end":"2025-05-23","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Papeete Tahiti, French Polynesia"},{"id":"a6","start":"2025-07-27","end":"2025-07-27","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Denarau Island, Fiji"},{"id":"a7","start":"2025-07-28","end":"2025-07-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a8","start":"2025-08-01","end":"2025-08-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a9","start":"2025-09-01","end":"2025-09-13","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a10","start":"2025-09-14","end":"2025-09-14","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Honiara, Solomon Islands, via Brisbane."},{"id":"a11","start":"2025-11-05","end":"2025-11-05","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Brisbane."},{"id":"a12","start":"2025-11-06","end":"2025-11-30","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a13","start":"2025-12-01","end":"2025-12-14","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a14","start":"2025-12-15","end":"2025-12-15","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Brisbane."},{"id":"b1","start":"2026-01-30","end":"2026-01-30","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Koror, Palau."},{"id":"b2","start":"2026-01-31","end":"2026-01-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b3","start":"2026-02-01","end":"2026-02-28","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b4","start":"2026-03-01","end":"2026-03-19","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b5","start":"2026-03-20","end":"2026-03-20","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Subic Bay, Philippines."},{"id":"b6","start":"2026-05-28","end":"2026-05-28","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Benoa Marina, Bali, Indonesia. Holiday wit Shane until 30/05/2026."},{"id":"b7","start":"2026-05-29","end":"2026-07-24","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b8","start":"2026-07-25","end":"2026-07-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b9","start":"2026-08-01","end":"2026-08-01","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Kota Kinabalu, Malaysia."},{"id":"b10","start":"2026-09-23","end":"2026-09-23","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Kota Kinabalu, Malaysia."},{"id":"b11","start":"2026-09-24","end":"2026-11-01","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b12","start":"2026-11-02","end":"2026-11-02","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Phuket, Thailand."},{"id":"nmw8l065o","start":"2025-01-14","end":"2025-01-14","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Joining MY Treehouse for the first time in Papagayo, Costa Rica"},{"id":"nmw8mvntf","start":"2026-12-17","end":"2026-12-17","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":"Travel from Phuket, Thailand."},{"id":"nmw8n10zm","start":"2026-12-18","end":"2027-02-06","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"nmw8n1i5b","start":"2027-02-07","end":"2027-02-07","type":"Travel Day","paid":"Yes","status":"Approved","comment":""}],"updated":"2026-11-09T02:30:00.000Z"}</script><script id="app">
 (function(){
-var S=JSON.parse(document.getElementById('state').textContent);
-var LSKEY='absence-tracker';try{var L=JSON.parse(localStorage.getItem(LSKEY)||'null');if(L&&L.entries&&(L.updated||'')>(S.updated||''))S=L;}catch(_){}
-var TF=S.trackFrom?dn(S.trackFrom):-1e9;
+var RAW=JSON.parse(document.getElementById('state').textContent);
+var LSKEY='absence-tracker';try{var L=JSON.parse(localStorage.getItem(LSKEY)||'null');if(L&&(L.entries||L.enc)&&(L.updated||'')>(RAW.updated||''))RAW=L;}catch(_){}
+var S=null,TF=-1e9,PW=null,SALT=null,KEY=null;
+var TE=new TextEncoder(),TD=new TextDecoder();
+function b64(u){var s='';u=new Uint8Array(u);for(var i=0;i<u.length;i++)s+=String.fromCharCode(u[i]);return btoa(s);}
+function ub64(s){var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+function derive(pw,salt){return crypto.subtle.importKey('raw',TE.encode(pw),'PBKDF2',false,['deriveKey']).then(function(k){return crypto.subtle.deriveKey({name:'PBKDF2',salt:salt,iterations:250000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);});}
+function seal(obj){if(!KEY)return Promise.resolve(obj);var iv=crypto.getRandomValues(new Uint8Array(12));return crypto.subtle.encrypt({name:'AES-GCM',iv:iv},KEY,TE.encode(JSON.stringify(obj))).then(function(ct){return{enc:1,v:1,salt:b64(SALT),iv:b64(iv),ct:b64(ct),updated:obj.updated||''};});}
+function openBox(box,pw){var salt=ub64(box.salt);return derive(pw,salt).then(function(k){return crypto.subtle.decrypt({name:'AES-GCM',iv:ub64(box.iv)},k,ub64(box.ct)).then(function(pt){return{data:JSON.parse(TD.decode(pt)),key:k,salt:salt};});});}
+function setData(d){S=d;TF=S.trackFrom?dn(S.trackFrom):-1e9;}
 var TYPES=['Rotation Leave','Travel Day','Annual Leave','Sick Leave','Training','Other'];
 var STATUSES=['Approved','Pending','Planned','Rejected'];
 var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -118,7 +127,7 @@ var st=status();
 var h='';
 h+='<div class="wrap"><header><div><h1>Absence Tracker</h1><div class="sub">'+esc(S.name)+' · '+esc(S.role)+' · '+esc(S.vessel)+'</div></div><div class="status"><i class="dot" style="background:'+st.c+'"></i>'+esc(st.txt)+'</div></header>';
 h+='<div class="bar"><div class="pills">';ys.forEach(function(y){h+='<button class="pill'+(v===y?' on':'')+'" data-view="year-'+y+'">'+y+'</button>';});h+='<button class="pill'+(v==='all'?' on':'')+'" data-view="all">All years</button></div>';
-h+='<div style="display:flex;gap:10px;align-items:center"><span class="save" id="save">'+esc(saveMsg)+'</span><button class="btn ghost" id="csv">Copy CSV</button><button class="btn ghost" id="dl" title="Save a copy of this page with your data built in">Download page</button><label class="btn ghost" style="margin:0;color:var(--text)" title="Load data from a downloaded page">Import<input type="file" id="imp" accept=".html,.htm,.json" style="display:none"></label>'+(readOnly?'':'<button class="btn" id="add">+ Add absence</button>')+'</div></div>';
+h+='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end"><span class="save" id="save">'+esc(saveMsg)+'</span><button class="btn ghost" id="pw">'+(KEY?'Password':'Set password')+'</button>'+(KEY?'<button class="btn ghost" id="lock">Lock</button>':'')+'<button class="btn ghost" id="csv">Copy CSV</button><button class="btn ghost" id="dl" title="Save a copy of this page with your data built in">Download page</button><label class="btn ghost" style="margin:0;color:var(--text)" title="Load data from a downloaded page">Import<input type="file" id="imp" accept=".html,.htm,.json" style="display:none"></label>'+(readOnly?'':'<button class="btn" id="add">+ Add absence</button>')+'</div></div>';
 h+='<div class="tiles">';
 h+=tile('Total days off',tot,'days',tr.length+' trip'+(tr.length===1?'':'s')+(v==='all'?'':' touching '+v));
 h+=tile('Rotation leave',rot,'days','<i class="sw" style="background:var(--rot)"></i>');
@@ -180,23 +189,41 @@ if(isNew)S.entries.push(rec);else S.entries=S.entries.map(function(x){return x.i
 close();if(isNew)location.hash=v2h(yr(dn(s)));changed();};
 }
 function v2h(y){return 'year-'+y;}
-function changed(){S.updated=new Date().toISOString();try{localStorage.setItem(LSKEY,JSON.stringify(S));setSave('Saved in this browser');}catch(_){setSave('Couldn\u2019t save in this browser');}
-render();}
+function changed(){S.updated=new Date().toISOString();render();persist();}
+function persist(msg){return seal(S).then(function(box){try{localStorage.setItem(LSKEY,JSON.stringify(box));setSave(msg||(KEY?'Saved in this browser · encrypted':'Saved in this browser'));}catch(_){setSave('Couldn’t save in this browser');}});}
 function setSave(m){saveMsg=m;var el=document.getElementById('save');if(el)el.textContent=m;}
-function buildDoc(){var css=document.getElementById('css').textContent,app=document.getElementById('app').textContent;
-var json=JSON.stringify(S).replace(/</g,'\\u003c');
-return '<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Absence Tracker — '+esc(S.name)+'</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"><style id="css">'+css+'</style></head><body><div id="root"></div><script id="state" type="application/json">'+json+'<\/script><script id="app">'+app+'<\/script></body></html>';}
+function buildDoc(){return seal(S).then(function(BOX){var css=document.getElementById('css').textContent,app=document.getElementById('app').textContent;
+var json=JSON.stringify(BOX).replace(/</g,'\\u003c');
+return '<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Absence Tracker'+(KEY?'':' — '+esc(S.name))+'</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"><style id="css">'+css+'</style></head><body><div id="root"></div><script id="state" type="application/json">'+json+'<\/script><script id="app">'+app+'<\/script></body></html>';});}
 
 root.addEventListener('click',function(ev){var t=ev.target.closest('button');if(!t)return;
 if(t.dataset.view){location.hash=t.dataset.view;return;}
 if(t.id==='add'){modal(null);return;}
 if(t.dataset.edit){modal(S.entries.filter(function(x){return x.id===t.dataset.edit;})[0]);return;}
-if(t.id==='dl'){var bl=new Blob([buildDoc()],{type:'text/html'}),u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='index.html';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);return;}
+if(t.id==='dl'){buildDoc().then(function(html){var bl=new Blob([html],{type:'text/html'}),u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='index.html';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);setSave(KEY?'Downloaded · locked with your password':'Downloaded · not password protected');});return;}
+if(t.id==='pw'){pwModal();return;}
+if(t.id==='lock'){location.reload();return;}
 if(t.id==='csv'){var rows=[['Start','End','Days','Type','Paid','Status','Comment']].concat(sorted().map(function(e){return[e.start,e.end,dur(e),e.type,e.paid,e.status,e.comment];}));
 var txt=rows.map(function(r){return r.map(function(c){c=String(c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(',');}).join('\n');
 try{navigator.clipboard.writeText(txt).then(function(){t.textContent='Copied ✓';setTimeout(function(){t.textContent='Copy CSV';},1600);},function(){t.textContent='Copy blocked';});}catch(_){t.textContent='Copy blocked';}}});
-root.addEventListener('change',function(ev){if(ev.target.id!=='imp'||!ev.target.files[0])return;var fr=new FileReader();fr.onload=function(){try{var txt=String(fr.result),data;if(/^\s*\{/.test(txt))data=JSON.parse(txt);else{var el=new DOMParser().parseFromString(txt,'text/html').getElementById('state');data=JSON.parse(el.textContent);}if(!data||!Array.isArray(data.entries))throw 0;S=data;changed();setSave('Imported '+S.entries.length+' entries');}catch(_){setSave('That file has no tracker data');}};fr.readAsText(ev.target.files[0]);});
-window.addEventListener('hashchange',render);
-render();
+root.addEventListener('change',function(ev){if(ev.target.id!=='imp'||!ev.target.files[0])return;var fr=new FileReader();fr.onload=function(){var data;try{var txt=String(fr.result);if(/^\s*\{/.test(txt))data=JSON.parse(txt);else{data=JSON.parse(new DOMParser().parseFromString(txt,'text/html').getElementById('state').textContent);}}catch(_){data=null;}
+if(!data||!(Array.isArray(data.entries)||data.enc)){setSave('That file has no tracker data');return;}
+function use(d){setData(d);changed();setSave('Imported '+S.entries.length+' entries');}
+if(!data.enc){use(data);return;}if(!PW){setSave('That file is password locked — set the same password here first');return;}
+openBox(data,PW).then(function(r){use(r.data);},function(){setSave('That file uses a different password');});};fr.readAsText(ev.target.files[0]);});
+window.addEventListener('hashchange',function(){if(S)render();});
+function login(){var ok=!!(window.crypto&&crypto.subtle);
+root.innerHTML='<div class="wrap"><form class="card login" id="lg"><h1>Absence Tracker</h1><div class="sub" style="margin-bottom:16px">This tracker is password protected.</div><label>Password<input type="password" id="lpw" autocomplete="current-password" required></label><div class="err" id="lerr">'+(ok?'':'This browser can’t unlock the page. Open it over https.')+'</div><button class="btn" style="width:100%" '+(ok?'':'disabled')+'>Unlock</button></form></div>';
+var f=document.getElementById('lg'),inp=document.getElementById('lpw'),er=document.getElementById('lerr'),btn=f.querySelector('button');inp.focus();
+f.onsubmit=function(ev){ev.preventDefault();var pw=inp.value;btn.disabled=true;btn.textContent='Unlocking…';er.textContent='';
+openBox(RAW,pw).then(function(r){PW=pw;KEY=r.key;SALT=r.salt;setData(r.data);render();},function(){btn.disabled=false;btn.textContent='Unlock';er.textContent='Wrong password.';inp.select();});};}
+function pwModal(){var o=document.createElement('div');o.className='overlay';
+o.innerHTML='<form class="modal"><h3>'+(KEY?'Change password':'Set a password')+'</h3><div class="sub" style="margin:-6px 0 14px;font-size:13.5px">Your entries are encrypted with this password. There is no way to recover them if it’s forgotten.</div><label>New password<input type="password" name="p1" autocomplete="new-password" required></label><label>Confirm password<input type="password" name="p2" autocomplete="new-password" required></label><div class="err" id="perr"></div><div class="mfoot"><div>'+(KEY?'<button type="button" class="btn danger" id="pwoff">Remove password</button>':'')+'</div><div style="display:flex;gap:8px"><button type="button" class="btn ghost" id="pwc">Cancel</button><button class="btn">Save</button></div></div></form>';
+document.body.appendChild(o);var f=o.querySelector('form'),er=o.querySelector('#perr');function close(){o.remove();}
+o.addEventListener('click',function(ev){if(ev.target===o)close();});o.querySelector('#pwc').onclick=close;f.p1.focus();
+var off=o.querySelector('#pwoff');if(off)off.onclick=function(){if(!off.dataset.armed){off.dataset.armed=1;off.textContent='Confirm remove';return;}KEY=null;PW=null;SALT=null;close();render();persist('Password removed');};
+f.onsubmit=function(ev){ev.preventDefault();var a=f.p1.value,b=f.p2.value;if(a.length<6){er.textContent='Use at least 6 characters.';return;}if(a!==b){er.textContent='The passwords don’t match.';return;}
+var salt=crypto.getRandomValues(new Uint8Array(16));derive(a,salt).then(function(k){KEY=k;SALT=salt;PW=a;close();render();persist('Password set · now Download page and upload it to GitHub');});};}
+if(RAW.enc)login();else{setData(RAW);render();}
 })();
 </script></body></html>
