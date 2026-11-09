@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Absence Tracker — Matthew Stu Dunthorne</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"><style id="css">
+:root{
+  --bg:#5a6e82; --panel:#677c91; --panel2:#73899f; --line:rgba(255,255,255,.16);
+  --text:#f6f8fa; --muted:#e0e7ee; --ink:#26303a;
+  --rot:#f3bd5c; --travel:#8fe0cf; --other:#f2a0a0; --onb:#b6c5f5; --board:rgba(255,255,255,.09);
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 "DM Sans",system-ui,sans-serif}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
+header{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between;margin-bottom:22px}
+h1{font-size:26px;margin:0;font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px;margin-top:2px}
+.status{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-weight:600;display:flex;gap:8px;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:6px 14px;font:inherit;font-weight:600;cursor:pointer}
+.pill.on{background:var(--text);color:var(--ink);border-color:var(--text)}
+.btn{background:var(--rot);color:var(--ink);border:0;border-radius:10px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+.btn.danger{background:var(--other);color:var(--ink)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:8px}
+.save{font-size:13px;color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.tile .k{font-size:13px;color:var(--muted);font-weight:500}
+.tile .v{font-size:30px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.tile .v small{font-size:14px;font-weight:500;color:var(--muted);margin-left:4px}
+.tile .n{font-size:12.5px;color:var(--muted);margin-top:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:18px}
+.card h2{font-size:17px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.legend{display:flex;gap:14px;font-size:13px;font-weight:500;color:var(--muted);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.month .mt{font-weight:600;font-size:13.5px;margin-bottom:5px;display:flex;justify-content:space-between}
+.month .mt span{color:var(--muted);font-weight:500;font-family:"DM Mono",monospace;font-size:12px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.d{aspect-ratio:1;border-radius:4px;background:var(--board);font-size:9.5px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.75);font-family:"DM Mono",monospace}
+.d.e{background:transparent}
+.d.rot{background:var(--rot);color:var(--ink)}
+.d.tra{background:var(--travel);color:var(--ink)}
+.d.oth{background:var(--other);color:var(--ink)}
+.d.onb{background:var(--onb);color:var(--ink)}
+.d.pre{opacity:.3}
+.tl{display:grid;grid-template-columns:72px repeat(31,minmax(14px,1fr)) 112px;gap:3px;align-items:center;min-width:720px}
+.tl .d{font-size:0}
+.tl .lab{font-size:12.5px;font-weight:600;white-space:nowrap}
+.tl .lab.ny{color:var(--rot)}
+.tln{font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tln b{color:var(--text)}
+.tlh{font-size:10px;color:var(--muted);text-align:center;font-family:"DM Mono",monospace}
+.d.today{outline:2px solid #fff;outline-offset:1px}
+.wd{font-size:9.5px;text-align:center;color:var(--muted);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:8px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+.scroll{overflow-x:auto}
+.acts{display:flex;gap:6px;justify-content:flex-end}
+.muted{color:var(--muted)}
+.gap{color:var(--muted);font-size:13px}
+.overlay{position:fixed;inset:0;background:rgba(30,38,46,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal{background:var(--panel2);border:1px solid var(--line);border-radius:18px;padding:20px;width:100%;max-width:440px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal h3{margin:0 0 14px;font-size:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:12px}
+input,select,textarea{display:block;width:100%;margin-top:5px;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:9px;padding:8px 10px;font:inherit;color-scheme:dark}
+textarea{min-height:60px;resize:vertical}
+.err{color:#ffd2d2;font-size:13px;min-height:18px;margin-bottom:6px}
+.mfoot{display:flex;justify-content:space-between;gap:8px;margin-top:6px}
+.empty{padding:20px;text-align:center;color:var(--muted)}
+footer{font-size:12.5px;color:var(--muted);margin-top:8px}
+@media (max-width:620px){h1{font-size:22px}.hide-sm{display:none}}
+</style></head><body><div id="root"></div><script id="state" type="application/json">{"name":"Matthew Stu Dunthorne","role":"Chief Engineer","vessel":"MY Treehouse","trackFrom":"2025-01-14","entries":[{"id":"a1","start":"2025-03-27","end":"2025-03-27","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from San Diego, USA. Via San Francisco."},{"id":"a2","start":"2025-03-28","end":"2025-03-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a3","start":"2025-04-01","end":"2025-04-30","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a4","start":"2025-05-01","end":"2025-05-21","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a5","start":"2025-05-23","end":"2025-05-23","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Papeete Tahiti, French Polynesia"},{"id":"a6","start":"2025-07-27","end":"2025-07-27","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Denarau Island, Fiji"},{"id":"a7","start":"2025-07-28","end":"2025-07-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a8","start":"2025-08-01","end":"2025-08-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a9","start":"2025-09-01","end":"2025-09-13","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a10","start":"2025-09-14","end":"2025-09-14","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Honiara, Solomon Islands, via Brisbane."},{"id":"a11","start":"2025-11-05","end":"2025-11-05","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Brisbane."},{"id":"a12","start":"2025-11-06","end":"2025-11-30","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a13","start":"2025-12-01","end":"2025-12-14","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"a14","start":"2025-12-15","end":"2025-12-15","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Brisbane."},{"id":"b1","start":"2026-01-30","end":"2026-01-30","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Koror, Palau."},{"id":"b2","start":"2026-01-31","end":"2026-01-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b3","start":"2026-02-01","end":"2026-02-28","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b4","start":"2026-03-01","end":"2026-03-19","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b5","start":"2026-03-20","end":"2026-03-20","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Subic Bay, Philippines."},{"id":"b6","start":"2026-05-28","end":"2026-05-28","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Benoa Marina, Bali, Indonesia. Holiday wit Shane until 30/05/2026."},{"id":"b7","start":"2026-05-29","end":"2026-07-24","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b8","start":"2026-07-25","end":"2026-07-31","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b9","start":"2026-08-01","end":"2026-08-01","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Kota Kinabalu, Malaysia."},{"id":"b10","start":"2026-09-23","end":"2026-09-23","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel from Kota Kinabalu, Malaysia."},{"id":"b11","start":"2026-09-24","end":"2026-11-01","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"b12","start":"2026-11-02","end":"2026-11-02","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Travel to Phuket, Thailand."},{"id":"nmw8l065o","start":"2025-01-14","end":"2025-01-14","type":"Travel Day","paid":"Yes","status":"Approved","comment":"Joining MY Treehouse for the first time in Papagayo, Costa Rica"},{"id":"nmw8mvntf","start":"2026-12-17","end":"2026-12-17","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":"Travel from Phuket, Thailand."},{"id":"nmw8n10zm","start":"2026-12-18","end":"2027-02-06","type":"Rotation Leave","paid":"Yes","status":"Approved","comment":""},{"id":"nmw8n1i5b","start":"2027-02-07","end":"2027-02-07","type":"Travel Day","paid":"Yes","status":"Approved","comment":""}],"updated":"2026-11-09T02:30:00.000Z"}</script><script id="app">
+(function(){
+var S=JSON.parse(document.getElementById('state').textContent);
+var LSKEY='absence-tracker';try{var L=JSON.parse(localStorage.getItem(LSKEY)||'null');if(L&&L.entries&&(L.updated||'')>(S.updated||''))S=L;}catch(_){}
+var TF=S.trackFrom?dn(S.trackFrom):-1e9;
+var TYPES=['Rotation Leave','Travel Day','Annual Leave','Sick Leave','Training','Other'];
+var STATUSES=['Approved','Pending','Planned','Rejected'];
+var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var root=document.getElementById('root');
+var saveMsg='';var art=null;var readOnly=false;var pubTimer=null;
+function dn(s){var p=s.split('-');return Math.round(Date.UTC(+p[0],+p[1]-1,+p[2])/864e5);}
+function iso(n){return new Date(n*864e5).toISOString().slice(0,10);}
+function fmt(n){var d=new Date(n*864e5);return d.getUTCDate()+' '+MON[d.getUTCMonth()]+' '+d.getUTCFullYear();}
+function yr(n){return new Date(n*864e5).getUTCFullYear();}
+var now=new Date();var TODAY=Math.round(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/864e5);
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function cls(t){return t==='Rotation Leave'?'rot':t==='Travel Day'?'tra':'oth';}
+function col(t){return t==='Rotation Leave'?'var(--rot)':t==='Travel Day'?'var(--travel)':'var(--other)';}
+function ov(e,a,b){return Math.max(0,Math.min(dn(e.end),b)-Math.max(dn(e.start),a)+1);}
+function dur(e){return dn(e.end)-dn(e.start)+1;}
+function counted(e){return e.status!=='Rejected';}
+function sorted(){return S.entries.slice().sort(function(a,b){return dn(a.start)-dn(b.start);});}
+function years(){var y={};y[yr(TODAY)]=1;S.entries.forEach(function(e){for(var k=yr(dn(e.start));k<=yr(dn(e.end));k++)y[k]=1;});return Object.keys(y).map(Number).sort();}
+function view(){var h=(location.hash||'').slice(1);if(h==='all')return 'all';var m=/^year-(\d{4})$/.exec(h);if(m)return +m[1];return yr(TODAY);}
+function trips(){var out=[],cur=null;sorted().filter(counted).forEach(function(e){var s=dn(e.start),en=dn(e.end);if(cur&&s<=cur.e+1){cur.e=Math.max(cur.e,en);cur.items.push(e);}else{cur={s:s,e:en,items:[e]};out.push(cur);}});return out;}
+function status(){var es=sorted().filter(counted);for(var i=0;i<es.length;i++){var e=es[i];if(dn(e.start)<=TODAY&&dn(e.end)>=TODAY){var t=trips().filter(function(t){return t.s<=TODAY&&t.e>=TODAY;})[0];return{off:true,txt:'Off — day '+(TODAY-t.s+1)+' of '+(t.e-t.s+1)+', back '+fmt(t.e+1),c:col(e.type)};}}
+var past=trips().filter(function(t){return t.e<TODAY;});var nxt=trips().filter(function(t){return t.s>TODAY;})[0];
+var txt=past.length?'On board — day '+(TODAY-past[past.length-1].e)+' (since '+fmt(past[past.length-1].e+1)+')':'On board';
+if(nxt)txt+=' · next leave in '+(nxt.s-TODAY)+' days';return{off:false,txt:txt,c:'#fff'};}
+
+function render(){
+var v=view(),ys=years();
+var a=v==='all'?dn(ys[0]+'-01-01'):dn(v+'-01-01'),b=v==='all'?dn(ys[ys.length-1]+'-12-31'):dn(v+'-12-31');
+var es=S.entries.filter(counted);
+var tot=0,rot=0,tra=0,oth=0;es.forEach(function(e){var d=ov(e,a,b);tot+=d;if(e.type==='Rotation Leave')rot+=d;else if(e.type==='Travel Day')tra+=d;else oth+=d;});
+var elapsedEnd=Math.min(TODAY,b),a0=Math.max(a,TF),elapsed=Math.max(0,elapsedEnd-a0+1),awayToDate=0;es.forEach(function(e){awayToDate+=ov(e,a0,elapsedEnd);});
+var onboard=elapsed-awayToDate;var pct=elapsed?Math.round(onboard/elapsed*100):0;
+var all=trips();var tr=all.filter(function(t){return t.e>=a&&t.s<=b;});
+var st=status();
+var h='';
+h+='<div class="wrap"><header><div><h1>Absence Tracker</h1><div class="sub">'+esc(S.name)+' · '+esc(S.role)+' · '+esc(S.vessel)+'</div></div><div class="status"><i class="dot" style="background:'+st.c+'"></i>'+esc(st.txt)+'</div></header>';
+h+='<div class="bar"><div class="pills">';ys.forEach(function(y){h+='<button class="pill'+(v===y?' on':'')+'" data-view="year-'+y+'">'+y+'</button>';});h+='<button class="pill'+(v==='all'?' on':'')+'" data-view="all">All years</button></div>';
+h+='<div style="display:flex;gap:10px;align-items:center"><span class="save" id="save">'+esc(saveMsg)+'</span><button class="btn ghost" id="csv">Copy CSV</button><button class="btn ghost" id="dl" title="Save a copy of this page with your data built in">Download page</button><label class="btn ghost" style="margin:0;color:var(--text)" title="Load data from a downloaded page">Import<input type="file" id="imp" accept=".html,.htm,.json" style="display:none"></label>'+(readOnly?'':'<button class="btn" id="add">+ Add absence</button>')+'</div></div>';
+h+='<div class="tiles">';
+h+=tile('Total days off',tot,'days',tr.length+' trip'+(tr.length===1?'':'s')+(v==='all'?'':' touching '+v));
+h+=tile('Rotation leave',rot,'days','<i class="sw" style="background:var(--rot)"></i>');
+h+=tile('Travel days',tra,'days','<i class="sw" style="background:var(--travel)"></i>');
+if(oth)h+=tile('Other leave',oth,'days','<i class="sw" style="background:var(--other)"></i>');
+h+=tile('Days on board'+(b>TODAY?' to date':''),onboard,'days','<i class="sw" style="background:var(--onb);vertical-align:-1px;margin-right:6px"></i>'+pct+'% of '+elapsed+' days · excl. travel');
+var jf=TF>-1e8?TF:(S.entries.length?Math.min.apply(null,S.entries.map(function(e){return dn(e.start);})):TODAY),aOff=0;es.forEach(function(e){aOff+=ov(e,jf,TODAY);});var aOn=Math.max(0,TODAY-jf+1-aOff),dif=aOn-aOff;
+h+=tile('On board vs off',(dif>0?'+':'')+dif,'days',aOn+' on board · '+aOff+' off since '+fmt(jf));
+h+='</div>';
+if(v!=='all'){h+='<div class="card"><h2>'+v+' calendar<div class="legend"><span><i class="sw" style="background:var(--rot)"></i>Rotation leave</span><span><i class="sw" style="background:var(--travel)"></i>Travel day</span><span><i class="sw" style="background:var(--other)"></i>Other</span><span><i class="sw" style="background:var(--onb)"></i>On board</span><span><i class="sw" style="background:var(--board)"></i>Upcoming</span></div></h2><div class="months">'+cal(v)+'</div></div>';}
+h+='<div class="card"><h2>Trips home<span class="muted" style="font-size:13px;font-weight:500">Back-to-back entries merged into one trip</span></h2><div class="scroll"><table><thead><tr><th>Left</th><th>Returned</th><th class="num">Days off</th><th class="num hide-sm">Leave</th><th class="num hide-sm">Travel</th><th class="num">On board before</th></tr></thead><tbody>';
+if(!tr.length)h+='<tr><td colspan="6" class="empty">No trips in this period.</td></tr>';
+tr.slice().reverse().forEach(function(t){var i=all.indexOf(t),prev=all[i-1];var lv=0,tv=0;t.items.forEach(function(e){if(e.type==='Travel Day')tv+=dur(e);else lv+=dur(e);});
+h+='<tr><td>'+fmt(t.s)+'</td><td>'+fmt(t.e)+'</td><td class="num"><b>'+(t.e-t.s+1)+'</b></td><td class="num hide-sm">'+lv+'</td><td class="num hide-sm">'+tv+'</td><td class="num gap">'+(prev?'<span class="tag" style="font-weight:500"><i class="sw" style="background:var(--onb)"></i>'+(t.s-prev.e-1)+' days</span>':'—')+'</td></tr>';});
+h+='</tbody></table></div></div>';
+var rows=sorted().filter(function(e){return ov(e,a,b)>0;}).reverse();
+h+='<div class="card"><h2>Absence entries<span class="muted" style="font-size:13px;font-weight:500">'+rows.length+' entries</span></h2><div class="scroll"><table><thead><tr><th>Start</th><th>End</th><th class="num">Days</th><th>Type</th><th class="hide-sm">Paid</th><th class="hide-sm">Status</th><th class="hide-sm">Comment</th>'+(readOnly?'':'<th></th>')+'</tr></thead><tbody>';
+if(!rows.length)h+='<tr><td colspan="8" class="empty">No absences recorded for this period.</td></tr>';
+rows.forEach(function(e){h+='<tr'+(counted(e)?'':' style="opacity:.55"')+'><td>'+fmt(dn(e.start))+'</td><td>'+fmt(dn(e.end))+'</td><td class="num">'+dur(e)+'</td><td><span class="tag"><i class="sw" style="background:'+col(e.type)+'"></i>'+esc(e.type)+'</span></td><td class="hide-sm">'+esc(e.paid)+'</td><td class="hide-sm">'+esc(e.status)+'</td><td class="hide-sm muted">'+esc(e.comment)+'</td>'+(readOnly?'':'<td><div class="acts"><button class="btn ghost sm" data-edit="'+e.id+'">Edit</button></div></td>')+'</tr>';});
+h+='</tbody></table></div></div>';
+h+=timeline();
+h+='</div>';
+root.innerHTML=h;
+}
+function timeline(){var map={};sorted().filter(counted).forEach(function(e){for(var d=dn(e.start);d<=dn(e.end);d++)map[d]=cls(e.type);});
+var s0=TF>-1e8?TF:TODAY,e0=TODAY;S.entries.forEach(function(e){s0=Math.min(s0,dn(e.start));e0=Math.max(e0,dn(e.end));});
+var sd=new Date(s0*864e5),ed=new Date(e0*864e5),y=sd.getUTCFullYear(),m=sd.getUTCMonth(),ey=ed.getUTCFullYear(),em=ed.getUTCMonth();
+var h='<div class="card"><h2>Full timeline<div class="legend"><span><i class="sw" style="background:var(--rot)"></i>Rotation leave</span><span><i class="sw" style="background:var(--travel)"></i>Travel day</span><span><i class="sw" style="background:var(--other)"></i>Other</span><span><i class="sw" style="background:var(--onb)"></i>On board</span><span><i class="sw" style="background:var(--board)"></i>Upcoming</span></div></h2><div class="scroll"><div class="tl"><div></div>';
+for(var k=1;k<=31;k++)h+='<div class="tlh">'+(k===1||k%5===0?k:'')+'</div>';h+='<div class="tlh" style="text-align:right">on · off</div>';
+while(y<ey||(y===ey&&m<=em)){var first=Math.round(Date.UTC(y,m,1)/864e5),len=new Date(Date.UTC(y,m+1,0)).getUTCDate(),on=0,off=0,row='';
+for(var d=0;d<31;d++){if(d>=len){row+='<div class="d e"></div>';continue;}var n=first+d,c=map[n]||'',lb={rot:'Rotation leave',tra:'Travel day',oth:'Other leave'}[c]||'';if(c)off++;else if(n<TF){c='pre';lb='Before joining';}else if(n<=TODAY){c='onb';on++;lb='On board';}else lb='Upcoming';row+='<div class="d '+c+(n===TODAY?' today':'')+'" title="'+fmt(n)+(lb?' · '+lb:'')+'"></div>';}
+h+='<div class="lab'+(m===0?' ny':'')+'">'+MON[m]+' '+y+'</div>'+row+'<div class="tln"><b>'+on+'</b> on · <b>'+off+'</b> off</div>';m++;if(m>11){m=0;y++;}}
+return h+'</div></div></div>';}
+function tile(k,v,u,n){return '<div class="tile"><div class="k">'+k+'</div><div class="v">'+v+'<small>'+u+'</small></div><div class="n">'+n+'</div></div>';}
+function cal(y){var map={};sorted().filter(counted).forEach(function(e){for(var d=dn(e.start);d<=dn(e.end);d++)map[d]=cls(e.type);});
+var h='';for(var m=0;m<12;m++){var first=Math.round(Date.UTC(y,m,1)/864e5),len=new Date(Date.UTC(y,m+1,0)).getUTCDate(),off=(new Date(first*864e5).getUTCDay()+6)%7,cnt=0;
+var g='';['M','T','W','T','F','S','S'].forEach(function(w){g+='<div class="wd">'+w+'</div>';});for(var i=0;i<off;i++)g+='<div class="d e"></div>';
+for(var d=0;d<len;d++){var n=first+d,c=map[n]||'';if(c)cnt++;if(!c&&n<=TODAY&&n>=TF)c='onb';if(n<TF)c='pre';g+='<div class="d '+c+(n===TODAY?' today':'')+'" title="'+fmt(n)+'">'+(d+1)+'</div>';}
+h+='<div class="month"><div class="mt">'+MON[m]+'<span>'+(cnt?cnt+'d off':'')+'</span></div><div class="days">'+g+'</div></div>';}return h;}
+
+function modal(e){var isNew=!e;e=e||{start:iso(TODAY),end:iso(TODAY),type:'Rotation Leave',paid:'Yes',status:'Approved',comment:''};
+var o=document.createElement('div');o.className='overlay';
+function opts(list,v){var l=list.indexOf(v)<0?list.concat([v]):list;return l.map(function(x){return '<option'+(x===v?' selected':'')+'>'+esc(x)+'</option>';}).join('');}
+o.innerHTML='<form class="modal"><h3>'+(isNew?'Add absence':'Edit absence')+'</h3><div class="grid2"><label>Start<input type="date" name="start" value="'+e.start+'" required></label><label>End<input type="date" name="end" value="'+e.end+'" required></label></div><label>Type<select name="type">'+opts(TYPES,e.type)+'</select></label><div class="grid2"><label>Paid<select name="paid">'+opts(['Yes','No'],e.paid)+'</select></label><label>Status<select name="status">'+opts(STATUSES,e.status)+'</select></label></div><label>Comment<textarea name="comment">'+esc(e.comment)+'</textarea></label><div class="err" id="ferr"></div><div class="mfoot"><div>'+(isNew?'':'<button type="button" class="btn danger" id="del">Delete</button>')+'</div><div style="display:flex;gap:8px"><button type="button" class="btn ghost" id="cancel">Cancel</button><button class="btn" type="submit">Save</button></div></div></form>';
+document.body.appendChild(o);
+var f=o.querySelector('form');function close(){o.remove();}
+var si=f.querySelector('[name=start]'),ei=f.querySelector('[name=end]'),endTouched=!isNew;
+ei.addEventListener('input',function(){endTouched=true;});
+function syncEnd(){if(si.value&&(!endTouched||!ei.value||ei.value<si.value))ei.value=si.value;}
+si.addEventListener('input',syncEnd);si.addEventListener('change',syncEnd);
+o.addEventListener('click',function(ev){if(ev.target===o)close();});
+o.querySelector('#cancel').onclick=close;
+var del=o.querySelector('#del');if(del)del.onclick=function(){if(del.dataset.armed){S.entries=S.entries.filter(function(x){return x.id!==e.id;});close();changed();}else{del.dataset.armed=1;del.textContent='Confirm delete';}};
+f.onsubmit=function(ev){ev.preventDefault();var d=new FormData(f);var s=d.get('start'),en=d.get('end');
+if(!s||!en){o.querySelector('#ferr').textContent='Both dates are needed.';return;}
+if(dn(en)<dn(s)){o.querySelector('#ferr').textContent='End date is before the start date.';return;}
+var rec={id:isNew?'n'+Date.now().toString(36):e.id,start:s,end:en,type:d.get('type'),paid:d.get('paid'),status:d.get('status'),comment:String(d.get('comment')||'').trim()};
+if(isNew)S.entries.push(rec);else S.entries=S.entries.map(function(x){return x.id===e.id?rec:x;});
+close();if(isNew)location.hash=v2h(yr(dn(s)));changed();};
+}
+function v2h(y){return 'year-'+y;}
+function changed(){S.updated=new Date().toISOString();try{localStorage.setItem(LSKEY,JSON.stringify(S));setSave('Saved in this browser');}catch(_){setSave('Couldn\u2019t save in this browser');}
+render();}
+function setSave(m){saveMsg=m;var el=document.getElementById('save');if(el)el.textContent=m;}
+function buildDoc(){var css=document.getElementById('css').textContent,app=document.getElementById('app').textContent;
+var json=JSON.stringify(S).replace(/</g,'\\u003c');
+return '<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Absence Tracker — '+esc(S.name)+'</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"><style id="css">'+css+'</style></head><body><div id="root"></div><script id="state" type="application/json">'+json+'<\/script><script id="app">'+app+'<\/script></body></html>';}
+
+root.addEventListener('click',function(ev){var t=ev.target.closest('button');if(!t)return;
+if(t.dataset.view){location.hash=t.dataset.view;return;}
+if(t.id==='add'){modal(null);return;}
+if(t.dataset.edit){modal(S.entries.filter(function(x){return x.id===t.dataset.edit;})[0]);return;}
+if(t.id==='dl'){var bl=new Blob([buildDoc()],{type:'text/html'}),u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download='index.html';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u);},2000);return;}
+if(t.id==='csv'){var rows=[['Start','End','Days','Type','Paid','Status','Comment']].concat(sorted().map(function(e){return[e.start,e.end,dur(e),e.type,e.paid,e.status,e.comment];}));
+var txt=rows.map(function(r){return r.map(function(c){c=String(c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(',');}).join('\n');
+try{navigator.clipboard.writeText(txt).then(function(){t.textContent='Copied ✓';setTimeout(function(){t.textContent='Copy CSV';},1600);},function(){t.textContent='Copy blocked';});}catch(_){t.textContent='Copy blocked';}}});
+root.addEventListener('change',function(ev){if(ev.target.id!=='imp'||!ev.target.files[0])return;var fr=new FileReader();fr.onload=function(){try{var txt=String(fr.result),data;if(/^\s*\{/.test(txt))data=JSON.parse(txt);else{var el=new DOMParser().parseFromString(txt,'text/html').getElementById('state');data=JSON.parse(el.textContent);}if(!data||!Array.isArray(data.entries))throw 0;S=data;changed();setSave('Imported '+S.entries.length+' entries');}catch(_){setSave('That file has no tracker data');}};fr.readAsText(ev.target.files[0]);});
+window.addEventListener('hashchange',render);
+render();
+})();
+</script></body></html>
