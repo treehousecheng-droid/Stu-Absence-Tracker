@@ -133,7 +133,7 @@ h+=tile('Total days off',tot,'days',tr.length+' trip'+(tr.length===1?'':'s')+(v=
 h+=tile('Rotation leave',rot,'days','<i class="sw" style="background:var(--rot)"></i>');
 h+=tile('Travel days',tra,'days','<i class="sw" style="background:var(--travel)"></i>');
 if(oth)h+=tile('Other leave',oth,'days','<i class="sw" style="background:var(--other)"></i>');
-h+=tile('Days on board'+(b>TODAY?' to date':''),onboard,'days','<i class="sw" style="background:var(--onb);vertical-align:-1px;margin-right:6px"></i>'+pct+'% of '+elapsed+' days · excl. travel');
+h+=tile(v==='all'?'Days on board to date':(v===String(new Date().getFullYear())?'Days on board this year':'Days on board in '+v),onboard,'days','<i class="sw" style="background:var(--onb);vertical-align:-1px;margin-right:6px"></i>'+pct+'% of '+elapsed+' days · excl. travel');
 var jf=TF>-1e8?TF:(S.entries.length?Math.min.apply(null,S.entries.map(function(e){return dn(e.start);})):TODAY),aOff=0;es.forEach(function(e){aOff+=ov(e,jf,TODAY);});var aOn=Math.max(0,TODAY-jf+1-aOff),dif=aOn-aOff;
 h+=tile('On board vs off',(dif>0?'+':'')+dif,'days',aOn+' on board · '+aOff+' off since '+fmt(jf));
 h+='</div>';
