@@ -1,0 +1,16 @@
+{
+  "name": "Absence Tracker",
+  "short_name": "Absence",
+  "description": "Track rotation leave, travel days, time on board and leave balance.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#5a6e82",
+  "theme_color": "#5a6e82",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
