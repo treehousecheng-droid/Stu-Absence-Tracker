@@ -1,6 +1,6 @@
 // Absence Tracker service worker: lets the app open offline.
 // Pages are fetched fresh when online (so a new upload shows straight away) and cached for offline use.
-const CACHE = 'absence-v1';
+const CACHE = 'absence-v2';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-512-maskable.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -19,6 +19,9 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  // Never cache the synced data file or GitHub's API: always fetch them fresh.
+  if (url.hostname === 'api.github.com' || url.pathname.endsWith('/data.json')) return;
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req, { cache: 'no-cache' })
